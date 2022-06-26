@@ -1,6 +1,7 @@
 
 const path = require('path');
 const DonePlugin = require('./plugins/done-plugin');
+const AssetsPlugin = require('./plugins/assets-plugin');
 
 module.exports = {
     mode:'development',
@@ -12,6 +13,7 @@ module.exports = {
     plugins:[
         new DonePlugin({
             name:'DonePlugin'
-        })
+        }),
+        new AssetsPlugin()
     ]
 }
