@@ -1,5 +1,5 @@
 const { ExternalModule } = require("webpack");
-
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 class AutoExternalPlugin {
   constructor(options) {
     this.options = options;
@@ -30,15 +30,39 @@ class AutoExternalPlugin {
                 }
               });
           });
-          normalModuleFactory.hooks.factorize.tapAsync('AutoExternalPlugin',(resolveData,callback) => {
-            const { request } =  resolveData;
-            if(this.externalModules.includes(request)) {
-                let { variable } = this.options[request];
-                callback(null,new ExternalModule(variable,'window',request))
+        normalModuleFactory.hooks.factorize.tapAsync(
+          "AutoExternalPlugin",
+          (resolveData, callback) => {
+            const { request } = resolveData;
+            if (this.externalModules.includes(request)) {
+              let { variable } = this.options[request];
+              callback(null, new ExternalModule(variable, "window", request));
+            } else {
+              callback(null);
             }
-          })
+          }
+        );
       }
     );
+    compiler.hooks.compilation.tap("AutoExternalPlugin", (compilation) => {
+      HtmlWebpackPlugin.getHooks(compilation).afterAssetTags.tapAsync(
+        "AutoExternalPlugin",
+        (htmlData, callback) => {
+          Object.keys(this.options)
+            .filter((key) => this.importedModules.has(key))
+            .forEach((key) => {
+              htmlData.assetTags.script.unshift({
+                tagName: "script",
+                voidTag: false,
+                attributes: {
+                  defer: false,
+                  scr: this.options[key].url,
+                },
+              });
+            });
+        }
+      );
+    });
   }
 }
 

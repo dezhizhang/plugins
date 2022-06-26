@@ -90,6 +90,7 @@
     "has-symbols": "^1.0.3",
     "hpack.js": "^2.1.6",
     "html-entities": "^2.3.3",
+    "html-webpack-plugin": "^5.5.0",
     "http-deceiver": "^1.2.7",
     "http-errors": "^2.0.0",
     "http-parser-js": "^0.5.7",
@@ -235,7 +236,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build":"webpack",
+    "build": "webpack",
     "start": "webpack-dev-server"
   },
   "repository": {
