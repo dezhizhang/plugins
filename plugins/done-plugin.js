@@ -1,6 +1,5 @@
-# plugins
 
-```js
+
 class DonePlugin{
     constructor(options) {
         this.options = options;
@@ -20,6 +19,3 @@ class DonePlugin{
 }
 
 module.exports = DonePlugin;
-
-
-```
