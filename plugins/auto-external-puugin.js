@@ -1,3 +1,5 @@
+const { ExternalModule } = require("webpack");
+
 class AutoExternalPlugin {
   constructor(options) {
     this.options = options;
@@ -28,6 +30,13 @@ class AutoExternalPlugin {
                 }
               });
           });
+          normalModuleFactory.hooks.factorize.tapAsync('AutoExternalPlugin',(resolveData,callback) => {
+            const { request } =  resolveData;
+            if(this.externalModules.includes(request)) {
+                let { variable } = this.options[request];
+                callback(null,new ExternalModule(variable,'window',request))
+            }
+          })
       }
     );
   }
